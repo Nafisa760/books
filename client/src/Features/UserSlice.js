@@ -1,16 +1,12 @@
-// src/Features/UserSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import * as ENV from "../config"; // 🔹 استيراد config
 
-// API URL
-const SERVER_URL = "http://localhost:3001";
-
-// تسجيل المستخدم
 export const registerUser = createAsyncThunk(
   "user/registerUser",
   async ({ fullName, username, password }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${SERVER_URL}/register`, {
+      const response = await axios.post(`${ENV.SERVER_URL}/register`, { // 🔹 تعديل الرابط
         fullName,
         username,
         password,
@@ -27,8 +23,7 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-
-
+// باقي الكود كما هو
 const initialState = {
   user: {},
   isLoading: false,

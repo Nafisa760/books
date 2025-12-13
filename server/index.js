@@ -2,19 +2,26 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import bcrypt from "bcryptjs";
-
 import User from "./Models/UserModel.js";
 import Book from "./Models/Book.js";
 import BorrowedBook from "./Models/BorrowedBookModel.js";
+import * as ENV from "./config.js";
 
 const app = express();
+//Middleware
+const corsOptions = {
+  origin: ENV.CLIENT_URL, //client URL local
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true, // Enable credentials (cookies, authorization headers, etc.)
+};
+app.use(cors(corsOptions));
 app.use(express.json());
-app.use(cors());
 
-// --------------------
-// 🔹 Database
-// --------------------
-const connectString = "mongodb+srv://66s2026_db_user:admin123@booksappcluster.wsrbpoa.mongodb.net/BooksDb?retryWrites=true&w=majority";
+//app.use(cors());
+
+//const connectString = "mongodb+srv://66s2026_db_user:admin123@booksappcluster.wsrbpoa.mongodb.net/BooksDb?retryWrites=true&w=majority";
+const connectString = `mongodb+srv://${ENV.DB_USER}:${ENV.DB_PASSWORD}@${ENV.DB_CLUSTER}/${ENV.DB_NAME}?retryWrites=true&w=majority`;
+
 
 mongoose.connect(connectString)
   .then(() => console.log("✅ Connected to MongoDB"))
@@ -207,9 +214,13 @@ app.get("/user/all", async (req, res) => {
   }
 });
 
-// --------------------
-// 🔹 Start Server
-// --------------------
+/*
 app.listen(3001, () => {
   console.log("🚀 Server running on port 3001");
+});
+*/
+
+const port = ENV.PORT || 3001;
+app.listen(port, () => {
+  console.log(`You are connected at port: ${port}`);
 });
