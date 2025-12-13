@@ -1,16 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import * as ENV from "../config"; // 🔹 استيراد config
 
-const SERVER_URL = "http://localhost:3001";
-
-/* -------------------------------------------------------
-   🔹 1) Fetch Borrowed Books (Student)
-------------------------------------------------------- */
 export const fetchBorrowedBooks = createAsyncThunk(
   "borrowed/fetchBorrowedBooks",
   async (username, { rejectWithValue }) => {
     try {
-      const res = await axios.get(`${SERVER_URL}/borrowedbooks/${username}`);
+      const res = await axios.get(`${ENV.SERVER_URL}/borrowedbooks/${username}`); // 🔹 تعديل الرابط
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response?.data || "Error fetching borrowed books");
@@ -18,14 +14,11 @@ export const fetchBorrowedBooks = createAsyncThunk(
   }
 );
 
-/* -------------------------------------------------------
-   🔹 2) Fetch ALL Borrowed Books (Admin)  ✅ مهم
-------------------------------------------------------- */
 export const fetchAllBorrowedBooks = createAsyncThunk(
   "borrowed/fetchAllBorrowedBooks",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get(`${SERVER_URL}/borrowedbooks/all`);
+      const res = await axios.get(`${ENV.SERVER_URL}/borrowedbooks/all`); // 🔹 تعديل الرابط
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response?.data || "Error fetching all borrowed books");
@@ -33,17 +26,14 @@ export const fetchAllBorrowedBooks = createAsyncThunk(
   }
 );
 
-/* -------------------------------------------------------
-   🔹 3) Return Book
-------------------------------------------------------- */
 export const returnBook = createAsyncThunk(
   "borrowed/returnBook",
   async ({ _id, rating, feedback }, { rejectWithValue }) => {
     try {
-      const res = await axios.put(`${SERVER_URL}/borrowedbooks/return/${_id}`, {
+      const res = await axios.put(`${ENV.SERVER_URL}/borrowedbooks/return/${_id}`, {
         rating,
         feedback
-      });
+      }); // 🔹 تعديل الرابط
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response?.data || "Error returning book");
@@ -51,9 +41,7 @@ export const returnBook = createAsyncThunk(
   }
 );
 
-/* -------------------------------------------------------
-   🔹 Slice
-------------------------------------------------------- */
+// باقي الكود كما هو
 const borrowedSlice = createSlice({
   name: "borrowed",
   initialState: {
@@ -62,16 +50,13 @@ const borrowedSlice = createSlice({
     error: null,
     successMessage: null,
   },
-
   reducers: {
     clearSuccessMessage: (state) => {
       state.successMessage = null;
     }
   },
-
   extraReducers: (builder) => {
     builder
-      /* ---------------- Student ---------------- */
       .addCase(fetchBorrowedBooks.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -84,8 +69,6 @@ const borrowedSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-
-      /* ---------------- Admin ---------------- */
       .addCase(fetchAllBorrowedBooks.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -98,8 +81,6 @@ const borrowedSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-
-      /* ---------------- Return Book ---------------- */
       .addCase(returnBook.pending, (state) => {
         state.loading = true;
         state.error = null;

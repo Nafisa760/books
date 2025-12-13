@@ -1,13 +1,12 @@
 // src/Features/BookSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-
-const SERVER_URL = "http://localhost:3001";
+import * as ENV from "../config";  // 🔹 استيراد config
 
 // Fetch all books
 export const fetchBooks = createAsyncThunk("books/fetchBooks", async (_, { rejectWithValue }) => {
   try {
-    const res = await axios.get(`${SERVER_URL}/books`);
+    const res = await axios.get(`${ENV.SERVER_URL}/books`); // 🔹 تعديل الرابط
     return res.data;
   } catch (err) {
     return rejectWithValue(err.response?.data?.message || "Server error");
@@ -17,7 +16,7 @@ export const fetchBooks = createAsyncThunk("books/fetchBooks", async (_, { rejec
 // Add book
 export const addBook = createAsyncThunk("books/addBook", async (book, { rejectWithValue }) => {
   try {
-    const res = await axios.post(`${SERVER_URL}/books`, book);
+    const res = await axios.post(`${ENV.SERVER_URL}/books`, book); // 🔹 تعديل الرابط
     return res.data;
   } catch (err) {
     return rejectWithValue(err.response?.data?.message || "Server error");
@@ -29,7 +28,7 @@ export const editBook = createAsyncThunk(
   "books/editBook",
   async ({ id, title, author, year }, { rejectWithValue }) => {
     try {
-      const res = await axios.put(`${SERVER_URL}/books/${id}`, { title, author, year });
+      const res = await axios.put(`${ENV.SERVER_URL}/books/${id}`, { title, author, year }); // 🔹 تعديل الرابط
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || "Server error");
@@ -40,13 +39,14 @@ export const editBook = createAsyncThunk(
 // Delete book
 export const deleteBook = createAsyncThunk("books/deleteBook", async (id, { rejectWithValue }) => {
   try {
-    await axios.delete(`${SERVER_URL}/books/${id}`);
+    await axios.delete(`${ENV.SERVER_URL}/books/${id}`); // 🔹 تعديل الرابط
     return id;
   } catch (err) {
     return rejectWithValue(err.response?.data?.message || "Server error");
   }
 });
 
+// باقي الكود كما هو
 const initialState = {
   books: [],
   isLoading: false,
@@ -79,7 +79,6 @@ const bookSlice = createSlice({
         state.isError = true;
         state.errorMessage = action.payload;
       })
-
       // ADD
       .addCase(addBook.pending, (state) => { state.isLoading = true; })
       .addCase(addBook.fulfilled, (state, action) => {
@@ -92,7 +91,6 @@ const bookSlice = createSlice({
         state.isError = true;
         state.errorMessage = action.payload;
       })
-
       // EDIT
       .addCase(editBook.pending, (state) => { state.isLoading = true; })
       .addCase(editBook.fulfilled, (state, action) => {
@@ -107,7 +105,6 @@ const bookSlice = createSlice({
         state.isError = true;
         state.errorMessage = action.payload;
       })
-
       // DELETE
       .addCase(deleteBook.pending, (state) => { state.isLoading = true; })
       .addCase(deleteBook.fulfilled, (state, action) => {
