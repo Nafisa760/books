@@ -196,27 +196,32 @@ app.post("/books/rate", async (req, res) => {
 // --------------------
 // 🔹 Get Borrowed Books
 // --------------------
-// Get all borrowed books (admin)
-app.get("/borrowedbooks/all", async (req, res) => {
+
+// جلب الكتب الخاصة بالطالب
+// كتب المستخدم فقط
+app.get("/borrowedbooks/:username", async (req, res) => {
   try {
-    // Populate the bookId to get full book details
-    const borrowed = await BorrowedBook.find().populate("bookId");
+    const borrowed = await BorrowedBook.find({ 
+      studentUsername: req.params.username, 
+      returnedAt: null 
+    }).populate("bookId");
     res.json(borrowed);
   } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
+    res.status(500).json({ error: err.message });
   }
 });
 
-
-// Get all users (admin)
-app.get("/user/all", async (req, res) => {
+// جلب كل الكتب المقترضة (Admin)
+app.get("/borrowedbooks/all", async (req, res) => {
   try {
-    const users = await User.find().select("-password");
-    res.json(users);
+    const borrowed = await BorrowedBook.find().populate("bookId"); // populate عشان تجيب تفاصيل الكتاب
+    res.json(borrowed);
   } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
+    res.status(500).json({ error: err.message });
   }
 });
+
+
 
 /*
 app.listen(3001, () => {
