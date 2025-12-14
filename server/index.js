@@ -196,6 +196,7 @@ app.post("/books/rate", async (req, res) => {
 // --------------------
 // 🔹 Get Borrowed Books
 // --------------------
+<<<<<<< HEAD
 
 // جلب الكتب الخاصة بالطالب
 // كتب المستخدم فقط
@@ -205,14 +206,27 @@ app.get("/borrowedbooks/:username", async (req, res) => {
       studentUsername: req.params.username, 
       returnedAt: null 
     }).populate("bookId");
+=======
+// Get all borrowed books (admin)
+app.get("/borrowedbooks/all", async (req, res) => {
+  try {
+    // Populate the bookId to get full book details
+    const borrowed = await BorrowedBook.find().populate("bookId");
+>>>>>>> 2f2a94abfe466f32fd3545f4605f5ce20fa52451
     res.json(borrowed);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
+<<<<<<< HEAD
 // جلب كل الكتب المقترضة (Admin)
 app.get("/borrowedbooks/all", async (req, res) => {
+=======
+
+// Get all users (admin)
+app.get("/user/all", async (req, res) => {
+>>>>>>> 2f2a94abfe466f32fd3545f4605f5ce20fa52451
   try {
     const borrowed = await BorrowedBook.find().populate("bookId"); // populate عشان تجيب تفاصيل الكتاب
     res.json(borrowed);

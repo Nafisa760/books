@@ -12,6 +12,10 @@ const MyBorrowedBooks = () => {
   const [ratings, setRatings] = useState({});
   const [feedbacks, setFeedbacks] = useState({});
 
+<<<<<<< HEAD
+=======
+  
+>>>>>>> 2f2a94abfe466f32fd3545f4605f5ce20fa52451
   useEffect(() => {
     if (username) dispatch(fetchBorrowedBooks(username));
   }, [dispatch, username]);
@@ -29,17 +33,37 @@ const MyBorrowedBooks = () => {
     setFeedbacks(f);
   }, [borrowedBooks]);
 
+<<<<<<< HEAD
   const handleReturn = async (borrowedId, bookId) => {
     const rating = ratings[bookId] || 0;
     const feedback = feedbacks[bookId] || "";
     await dispatch(returnBook({ _id: borrowedId, rating, feedback }));
+=======
+   
+  const handleReturn = async (borrowedId, bookId) => {
+    const rating = ratings[bookId] || 0;
+    const feedback = feedbacks[bookId] || "";
+
+    await dispatch(returnBook({ _id: borrowedId, rating, feedback }));
+
+  
+>>>>>>> 2f2a94abfe466f32fd3545f4605f5ce20fa52451
     setRatings(prev => ({ ...prev, [bookId]: rating }));
     setFeedbacks(prev => ({ ...prev, [bookId]: feedback }));
   };
 
+<<<<<<< HEAD
   useEffect(() => {
     if (successMessage) {
       const timer = setTimeout(() => dispatch(clearSuccessMessage()), 3000);
+=======
+  
+  useEffect(() => {
+    if (successMessage) {
+      const timer = setTimeout(() => {
+        dispatch(clearSuccessMessage());
+      }, 3000);
+>>>>>>> 2f2a94abfe466f32fd3545f4605f5ce20fa52451
       return () => clearTimeout(timer);
     }
   }, [successMessage, dispatch]);
@@ -54,6 +78,10 @@ const MyBorrowedBooks = () => {
         {borrowedBooks.length === 0 && !isLoading && <p className="text-center">You have no borrowed books.</p>}
         {borrowedBooks.map(b => {
           if (!b.bookId) return null;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2f2a94abfe466f32fd3545f4605f5ce20fa52451
           const isReturned = !!b.returnedAt;
           return (
             <Col md="4" className="mb-3" key={b._id}>
@@ -72,10 +100,20 @@ const MyBorrowedBooks = () => {
                         style={{
                           cursor: isReturned ? "not-allowed" : "pointer",
                           color: star <= (ratings[b.bookId._id] || 0) ? "gold" : "gray",
+<<<<<<< HEAD
                           fontSize: "1.2rem", marginRight: "3px"
                         }}
                         onClick={() => !isReturned && setRatings(prev => ({...prev,[b.bookId._id]:star}))}
                       >★</span>
+=======
+                          fontSize: "1.2rem",
+                          marginRight: "3px"
+                        }}
+                        onClick={() => !isReturned && setRatings(prev => ({ ...prev, [b.bookId._id]: star }))}
+                      >
+                        ★
+                      </span>
+>>>>>>> 2f2a94abfe466f32fd3545f4605f5ce20fa52451
                     ))}
                   </div>
 
@@ -84,11 +122,23 @@ const MyBorrowedBooks = () => {
                     placeholder="Leave feedback"
                     value={feedbacks[b.bookId._id] || ""}
                     disabled={isReturned}
+<<<<<<< HEAD
                     onChange={e => !isReturned && setFeedbacks(prev => ({...prev,[b.bookId._id]: e.target.value}))}
                     className="mb-2"
                   />
 
                   {!isReturned && <Button color="success" onClick={() => handleReturn(b._id, b.bookId._id)}>Return Book</Button>}
+=======
+                    onChange={e => !isReturned && setFeedbacks(prev => ({ ...prev, [b.bookId._id]: e.target.value }))}
+                    className="mb-2"
+                  />
+
+                  {!isReturned && (
+                    <Button color="success" onClick={() => handleReturn(b._id, b.bookId._id)}>
+                      Return Book
+                    </Button>
+                  )}
+>>>>>>> 2f2a94abfe466f32fd3545f4605f5ce20fa52451
                 </CardBody>
               </Card>
             </Col>
