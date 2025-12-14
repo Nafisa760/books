@@ -196,14 +196,17 @@ app.post("/books/rate", async (req, res) => {
 // --------------------
 // 🔹 Get Borrowed Books
 // --------------------
-app.get("/borrowedbooks/:username", async (req, res) => {
+// Get all borrowed books (admin)
+app.get("/borrowedbooks/all", async (req, res) => {
   try {
-    const borrowed = await BorrowedBook.find({ studentUsername: req.params.username, returnedAt: null }).populate("bookId");
+    // Populate the bookId to get full book details
+    const borrowed = await BorrowedBook.find().populate("bookId");
     res.json(borrowed);
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
 });
+
 
 // Get all users (admin)
 app.get("/user/all", async (req, res) => {

@@ -33,7 +33,9 @@ const BorrowedList = () => {
 
       {loading && <p>Loading...</p>}
       {error && <p className="text-danger">{error}</p>}
-      {!loading && filteredBooks.length === 0 && <p className="text-center">No borrowed books found.</p>}
+      {!loading && filteredBooks.length === 0 && (
+        <p className="text-center">No borrowed books found.</p>
+      )}
 
       <Row>
         {filteredBooks.map(b => (
@@ -44,7 +46,7 @@ const BorrowedList = () => {
                 <p>Author: {b.bookId?.author || "-"}</p>
                 <p>Year: {b.bookId?.year || "-"}</p>
                 <p>Student: {b.studentUsername}</p>
-                <p>Borrowed At: {new Date(b.borrowedAt).toLocaleString()}</p>
+                <p>Borrowed At: {b.borrowedAt ? new Date(b.borrowedAt).toLocaleString() : "-"}</p>
                 {b.returnedAt && <p>Returned At: {new Date(b.returnedAt).toLocaleString()}</p>}
                 <p>Rating: {b.rating || "-"}</p>
                 <p>Feedback: {b.feedback || "-"}</p>
