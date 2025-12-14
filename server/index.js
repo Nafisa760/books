@@ -9,12 +9,13 @@ import * as ENV from "./config.js";
 
 const app = express();
 //Middleware
-const corsOptions = {
-  origin: ENV.CLIENT_URL, //client URL local
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  credentials: true, // Enable credentials (cookies, authorization headers, etc.)
-};
-app.use(cors(corsOptions));
+app.use(cors({
+  origin: [
+    "http://localhost:3000",
+    "https://books-client-jqdt.onrender.com"
+  ]
+}));
+
 app.use(express.json());
 
 //app.use(cors());
