@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import * as ENV from "../config";
 
-// كتب المستخدم
+
 export const fetchBorrowedBooks = createAsyncThunk(
   "borrowed/fetchBorrowedBooks",
   async (username, { rejectWithValue }) => {
@@ -15,7 +15,7 @@ export const fetchBorrowedBooks = createAsyncThunk(
   }
 );
 
-// كل الكتب للـ admin
+
 export const fetchAllBorrowedBooks = createAsyncThunk(
   "borrowed/fetchAllBorrowedBooks",
   async (_, { rejectWithValue }) => {
@@ -28,7 +28,7 @@ export const fetchAllBorrowedBooks = createAsyncThunk(
   }
 );
 
-// إرجاع كتاب
+
 export const returnBook = createAsyncThunk(
   "borrowed/returnBook",
   async ({ _id, rating, feedback }, { rejectWithValue }) => {
@@ -54,17 +54,17 @@ const borrowedSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // كتب المستخدم
+      
       .addCase(fetchBorrowedBooks.pending, (state) => { state.loading = true; state.error = null; })
       .addCase(fetchBorrowedBooks.fulfilled, (state, action) => { state.loading = false; state.borrowedBooks = action.payload; })
       .addCase(fetchBorrowedBooks.rejected, (state, action) => { state.loading = false; state.error = action.payload; })
 
-      // كل الكتب
+      
       .addCase(fetchAllBorrowedBooks.pending, (state) => { state.loading = true; state.error = null; })
       .addCase(fetchAllBorrowedBooks.fulfilled, (state, action) => { state.loading = false; state.borrowedBooks = action.payload; })
       .addCase(fetchAllBorrowedBooks.rejected, (state, action) => { state.loading = false; state.error = action.payload; })
 
-      // إرجاع الكتاب
+      
       .addCase(returnBook.pending, (state) => { state.loading = true; state.error = null; })
       .addCase(returnBook.fulfilled, (state, action) => {
         state.loading = false;

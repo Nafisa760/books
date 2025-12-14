@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import * as ENV from "../config";  // 🔹 استيراد config
 
-// Fetch all books
+
 export const fetchBooks = createAsyncThunk("books/fetchBooks", async (_, { rejectWithValue }) => {
   try {
     const res = await axios.get(`${ENV.SERVER_URL}/books`); // 🔹 تعديل الرابط
@@ -13,7 +13,7 @@ export const fetchBooks = createAsyncThunk("books/fetchBooks", async (_, { rejec
   }
 });
 
-// Add book
+
 export const addBook = createAsyncThunk("books/addBook", async (book, { rejectWithValue }) => {
   try {
     const res = await axios.post(`${ENV.SERVER_URL}/books`, book); // 🔹 تعديل الرابط
@@ -23,7 +23,7 @@ export const addBook = createAsyncThunk("books/addBook", async (book, { rejectWi
   }
 });
 
-// Edit book
+
 export const editBook = createAsyncThunk(
   "books/editBook",
   async ({ id, title, author, year }, { rejectWithValue }) => {
@@ -36,7 +36,7 @@ export const editBook = createAsyncThunk(
   }
 );
 
-// Delete book
+
 export const deleteBook = createAsyncThunk("books/deleteBook", async (id, { rejectWithValue }) => {
   try {
     await axios.delete(`${ENV.SERVER_URL}/books/${id}`); // 🔹 تعديل الرابط
@@ -46,7 +46,7 @@ export const deleteBook = createAsyncThunk("books/deleteBook", async (id, { reje
   }
 });
 
-// باقي الكود كما هو
+
 const initialState = {
   books: [],
   isLoading: false,

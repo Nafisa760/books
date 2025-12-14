@@ -1,4 +1,4 @@
-// src/Pages/AddEditBook.js
+
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,7 +32,7 @@ const AddEditBook = () => {
     year: "",
   });
 
-  // Load book for editing
+  
   useEffect(() => {
     if (bookId && books.length > 0) {
       const bookToEdit = books.find((b) => b._id === bookId);
@@ -46,19 +46,19 @@ const AddEditBook = () => {
     }
   }, [bookId, books]);
 
-  // Fetch books if list is empty
+  
   useEffect(() => {
     if (books.length === 0) dispatch(fetchBooks());
   }, [books.length, dispatch]);
 
-  // Cleanup
+  
   useEffect(() => {
     return () => {
       dispatch(resetBookState());
     };
   }, [dispatch]);
 
-  // Submit handler
+  
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -69,7 +69,7 @@ const AddEditBook = () => {
     }
   };
 
-  // Navigate after success
+  
   useEffect(() => {
     if (isSuccess) {
       navigate("/admin"); 

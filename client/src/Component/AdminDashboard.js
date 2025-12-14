@@ -15,7 +15,7 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const [books, setBooks] = useState([]);
 
-  // Fetch books from backend
+  
   const getBooks = async () => {
     try {
       const res = await axios.get("http://localhost:3001/books");
@@ -29,7 +29,7 @@ const AdminDashboard = () => {
     getBooks();
   }, []);
 
-  // Delete book
+  
   const deleteBook = async (id) => {
     try {
       await axios.delete(`http://localhost:3001/books/${id}`);
@@ -48,7 +48,7 @@ const AdminDashboard = () => {
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <h3>Books List</h3>
 
-                {/* ADD BOOK BUTTON */}
+                
                 <Button color="primary" onClick={() => navigate("/book")}>
                   + Add Book
                 </Button>

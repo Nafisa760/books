@@ -6,6 +6,9 @@ import User from "./Models/UserModel.js";
 import Book from "./Models/Book.js";
 import BorrowedBook from "./Models/BorrowedBookModel.js";
 import * as ENV from "./config.js";
+import dotenv from "dotenv";
+ dotenv.config();
+
 
 const app = express();
 //Middleware
@@ -198,29 +201,36 @@ app.post("/books/rate", async (req, res) => {
 // 🔹 Get Borrowed Books
 // --------------------
 
-// جلب الكتب الخاصة بالطالب
-// كتب المستخدم فقط
-app.get("/borrowedbooks/:username", async (req, res) => {
+// --------------------
+// 🔹 Get Borrowed Books
+// --------------------
+
+// ✅ جلب كل الكتب المقترضة (Admin) — لازم يكون قبل
+app.get("/borrowedbooks/all", async (req, res) => {
   try {
-    const borrowed = await BorrowedBook.find({ 
-      studentUsername: req.params.username, 
-      returnedAt: null 
-    }).populate("bookId");
+    const borrowed = await BorrowedBook
+      .find()
+      .populate("bookId");
     res.json(borrowed);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// جلب كل الكتب المقترضة (Admin)
-app.get("/borrowedbooks/all", async (req, res) => {
+// ✅ جلب الكتب الخاصة بالطالب
+app.get("/borrowedbooks/:username", async (req, res) => {
   try {
-    const borrowed = await BorrowedBook.find().populate("bookId"); // populate عشان تجيب تفاصيل الكتاب
+    const borrowed = await BorrowedBook.find({
+      studentUsername: req.params.username,
+      returnedAt: null
+    }).populate("bookId");
+
     res.json(borrowed);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
+
 
 
 

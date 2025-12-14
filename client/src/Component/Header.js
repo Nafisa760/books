@@ -17,7 +17,7 @@ const Header = ({ userRole, setUserRole }) => {
           <NavLink tag={Link} to="/">Home</NavLink>
         </NavItem>
 
-        {/* روابط الطالب */}
+       
         {userRole === "student" && (
           <>
             <NavItem>
@@ -32,7 +32,7 @@ const Header = ({ userRole, setUserRole }) => {
           </>
         )}
 
-        {/* روابط الادمن */}
+        
         {userRole === "admin" && (
           <>
             <NavItem>
@@ -48,7 +48,7 @@ const Header = ({ userRole, setUserRole }) => {
         )}
       </Nav>
 
-      {/* دائرة باسم الدور */}
+      
       {userRole && (
         <div
           style={{

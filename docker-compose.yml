@@ -1,0 +1,31 @@
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      REACT_APP_SERVER_URL: http://localhost:3001
+    depends_on:
+      - server
+    networks:
+      - app-network
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+      DB_USER: 66s2026_db_user
+      DB_PASSWORD: admin123
+      DB_NAME: BooksDb
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

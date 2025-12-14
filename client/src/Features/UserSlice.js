@@ -6,7 +6,7 @@ export const registerUser = createAsyncThunk(
   "user/registerUser",
   async ({ fullName, username, password }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${ENV.SERVER_URL}/register`, { // 🔹 تعديل الرابط
+      const response = await axios.post(`${ENV.SERVER_URL}/register`, { 
         fullName,
         username,
         password,
@@ -23,7 +23,7 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-// باقي الكود كما هو
+
 const initialState = {
   user: {},
   isLoading: false,

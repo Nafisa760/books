@@ -11,17 +11,16 @@ const Dashboard = () => {
 
   const user = useSelector((state) => state.user.user);
 
-  // ✅ Books state
+ 
   const books = useSelector((state) => state.books.books);
   const booksLoading = useSelector((state) => state.books.isLoading);
   const booksError = useSelector((state) => state.books.isError);
 
-  // ✅ BorrowedBooks state (تعديل هنا)
+ 
   const borrowed = useSelector((state) => state.borrowed.borrowedBooks);
   const borrowedLoading = useSelector((state) => state.borrowed.loading);
   const borrowedError = useSelector((state) => state.borrowed.error);
 
-  // Fetch data on mount or user change
   useEffect(() => {
     dispatch(fetchBooks());
 
@@ -30,7 +29,7 @@ const Dashboard = () => {
     }
   }, [dispatch, user]);
 
-  // Optional: Refresh borrowed books every 10 seconds
+  
   useEffect(() => {
     if (!user?.username) return;
     const interval = setInterval(() => {
@@ -58,7 +57,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Books statistics */}
+       
         <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
           <div
             style={{

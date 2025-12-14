@@ -8,12 +8,12 @@ const BorrowedList = () => {
   const { borrowedBooks, loading, error } = useSelector(state => state.borrowed);
   const [search, setSearch] = useState("");
 
-  // جلب جميع الكتب المقترضة عند تحميل الصفحة
+  
   useEffect(() => {
     dispatch(fetchAllBorrowedBooks());
   }, [dispatch]);
 
-  // فلترة الكتب بناء على البحث
+ 
   const filteredBooks = borrowedBooks.filter(
     b =>
       b.bookId?.title?.toLowerCase().includes(search.toLowerCase()) ||
