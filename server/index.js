@@ -13,7 +13,8 @@ app.use(cors({
   origin: [
     "http://localhost:3000",
     "https://books-client-jqdt.onrender.com"
-  ]
+  ],
+  credentials: true
 }));
 
 app.use(express.json());
