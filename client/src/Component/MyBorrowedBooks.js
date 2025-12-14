@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Container, Row, Col, Card, CardBody, Button, Input } from "reactstrap";
-import { fetchBorrowedBooks, returnBook } from "../Features/BorrowedBookModelSlice";
+import { fetchBorrowedBooks, returnBook, clearSuccessMessage } from "../Features/BorrowedBookModelSlice";
 
 const MyBorrowedBooks = () => {
   const dispatch = useDispatch();
-
   const username = localStorage.getItem("username");
 
-  const { borrowedBooks, loading: isLoading, error } = useSelector(state => state.borrowed);
+  const { borrowedBooks, loading: isLoading, error, successMessage } = useSelector(state => state.borrowed);
 
   const [ratings, setRatings] = useState({});
   const [feedbacks, setFeedbacks] = useState({});
-  const [successMessage, setSuccessMessage] = useState("");
 
   // جلب الكتب المقترضة عند تحميل الصفحة
   useEffect(() => {
@@ -23,14 +21,12 @@ const MyBorrowedBooks = () => {
   useEffect(() => {
     const r = {};
     const f = {};
-
     borrowedBooks.forEach(b => {
       if (b.bookId) {
         r[b.bookId._id] = b.rating || 0;
         f[b.bookId._id] = b.feedback || "";
       }
     });
-
     setRatings(r);
     setFeedbacks(f);
   }, [borrowedBooks]);
@@ -40,12 +36,22 @@ const MyBorrowedBooks = () => {
     const rating = ratings[bookId] || 0;
     const feedback = feedbacks[bookId] || "";
 
-    // إرسال _id لكل borrowedBook
     await dispatch(returnBook({ _id: borrowedId, rating, feedback }));
 
-    // رسالة نجاح
-    setSuccessMessage("✔️ Successfully returned!");
+    // تحديث محليًا بدون إعادة fetch
+    setRatings(prev => ({ ...prev, [bookId]: rating }));
+    setFeedbacks(prev => ({ ...prev, [bookId]: feedback }));
   };
+
+  // إزالة رسالة النجاح بعد 3 ثواني
+  useEffect(() => {
+    if (successMessage) {
+      const timer = setTimeout(() => {
+        dispatch(clearSuccessMessage());
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [successMessage, dispatch]);
 
   return (
     <Container className="py-4">
@@ -61,7 +67,7 @@ const MyBorrowedBooks = () => {
       {error && <p className="text-danger">{error}</p>}
 
       <Row>
-        {!isLoading && borrowedBooks.length === 0 && (
+        {borrowedBooks.length === 0 && !isLoading && (
           <p className="text-center">You have no borrowed books.</p>
         )}
 
@@ -77,11 +83,8 @@ const MyBorrowedBooks = () => {
                   <h5>{b.bookId.title}</h5>
                   <p>Author: {b.bookId.author}</p>
                   <p>Year: {b.bookId.year}</p>
-
                   <p>Borrowed At: {new Date(b.borrowedAt).toLocaleDateString()}</p>
-                  {b.returnedAt && (
-                    <p>Returned At: {new Date(b.returnedAt).toLocaleDateString()}</p>
-                  )}
+                  {b.returnedAt && <p>Returned At: {new Date(b.returnedAt).toLocaleDateString()}</p>}
 
                   {/* Rating */}
                   <div className="mb-2">
@@ -94,10 +97,7 @@ const MyBorrowedBooks = () => {
                           fontSize: "1.2rem",
                           marginRight: "3px"
                         }}
-                        onClick={() =>
-                          !isReturned &&
-                          setRatings(prev => ({ ...prev, [b.bookId._id]: star }))
-                        }
+                        onClick={() => !isReturned && setRatings(prev => ({ ...prev, [b.bookId._id]: star }))}
                       >
                         ★
                       </span>
@@ -110,22 +110,12 @@ const MyBorrowedBooks = () => {
                     placeholder="Leave feedback"
                     value={feedbacks[b.bookId._id] || ""}
                     disabled={isReturned}
-                    onChange={e =>
-                      !isReturned &&
-                      setFeedbacks(prev => ({
-                        ...prev,
-                        [b.bookId._id]: e.target.value,
-                      }))
-                    }
+                    onChange={e => !isReturned && setFeedbacks(prev => ({ ...prev, [b.bookId._id]: e.target.value }))}
                     className="mb-2"
                   />
 
-                  {/* زر الإرجاع */}
                   {!isReturned && (
-                    <Button
-                      color="success"
-                      onClick={() => handleReturn(b._id, b.bookId._id)}
-                    >
+                    <Button color="success" onClick={() => handleReturn(b._id, b.bookId._id)}>
                       Return Book
                     </Button>
                   )}
