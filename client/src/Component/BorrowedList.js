@@ -8,14 +8,15 @@ const BorrowedList = () => {
   const { borrowedBooks, loading, error } = useSelector(state => state.borrowed);
   const [search, setSearch] = useState("");
 
+  // جلب جميع الكتب المقترضة عند تحميل الصفحة
   useEffect(() => {
     dispatch(fetchAllBorrowedBooks());
   }, [dispatch]);
-  
 
+  // فلترة الكتب بناء على البحث
   const filteredBooks = borrowedBooks.filter(
     b =>
-      b.book?.title?.toLowerCase().includes(search.toLowerCase()) ||
+      b.bookId?.title?.toLowerCase().includes(search.toLowerCase()) ||
       b.studentUsername?.toLowerCase().includes(search.toLowerCase())
   );
 
@@ -32,16 +33,16 @@ const BorrowedList = () => {
 
       {loading && <p>Loading...</p>}
       {error && <p className="text-danger">{error}</p>}
-      {filteredBooks.length === 0 && !loading && <p>No borrowed books found.</p>}
+      {!loading && filteredBooks.length === 0 && <p className="text-center">No borrowed books found.</p>}
 
       <Row>
         {filteredBooks.map(b => (
           <Col md="4" key={b._id} className="mb-3">
             <Card className="shadow-sm">
               <CardBody>
-                <h5>{b.book?.title}</h5>
-                <p>Author: {b.book?.author}</p>
-                <p>Year: {b.book?.year}</p>
+                <h5>{b.bookId?.title || "Unknown Title"}</h5>
+                <p>Author: {b.bookId?.author || "-"}</p>
+                <p>Year: {b.bookId?.year || "-"}</p>
                 <p>Student: {b.studentUsername}</p>
                 <p>Borrowed At: {new Date(b.borrowedAt).toLocaleString()}</p>
                 {b.returnedAt && <p>Returned At: {new Date(b.returnedAt).toLocaleString()}</p>}

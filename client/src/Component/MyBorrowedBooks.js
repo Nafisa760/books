@@ -25,9 +25,9 @@ const MyBorrowedBooks = () => {
     const f = {};
 
     borrowedBooks.forEach(b => {
-      if (b.book) {
-        r[b.book._id] = b.rating || 0;
-        f[b.book._id] = b.feedback || "";
+      if (b.bookId) {
+        r[b.bookId._id] = b.rating || 0;
+        f[b.bookId._id] = b.feedback || "";
       }
     });
 
@@ -43,13 +43,8 @@ const MyBorrowedBooks = () => {
     // إرسال _id لكل borrowedBook
     await dispatch(returnBook({ _id: borrowedId, rating, feedback }));
 
-    // حذف الكتاب مباشرة من الصفحة
+    // رسالة نجاح
     setSuccessMessage("✔️ Successfully returned!");
-
-    // إعادة تحميل الكتب غير المرجعة بعد نصف ثانية لتحديث الصفحة
-    setTimeout(() => {
-      dispatch(fetchBorrowedBooks(username));
-    }, 500);
   };
 
   return (
@@ -66,12 +61,12 @@ const MyBorrowedBooks = () => {
       {error && <p className="text-danger">{error}</p>}
 
       <Row>
-        {borrowedBooks.length === 0 && !isLoading && (
+        {!isLoading && borrowedBooks.length === 0 && (
           <p className="text-center">You have no borrowed books.</p>
         )}
 
         {borrowedBooks.map(b => {
-          if (!b.book) return null;
+          if (!b.bookId) return null;
 
           const isReturned = !!b.returnedAt;
 
@@ -79,9 +74,9 @@ const MyBorrowedBooks = () => {
             <Col md="4" className="mb-3" key={b._id}>
               <Card className="shadow-sm">
                 <CardBody>
-                  <h5>{b.book.title}</h5>
-                  <p>Author: {b.book.author}</p>
-                  <p>Year: {b.book.year}</p>
+                  <h5>{b.bookId.title}</h5>
+                  <p>Author: {b.bookId.author}</p>
+                  <p>Year: {b.bookId.year}</p>
 
                   <p>Borrowed At: {new Date(b.borrowedAt).toLocaleDateString()}</p>
                   {b.returnedAt && (
@@ -95,13 +90,13 @@ const MyBorrowedBooks = () => {
                         key={star}
                         style={{
                           cursor: isReturned ? "not-allowed" : "pointer",
-                          color: star <= (ratings[b.book._id] || 0) ? "gold" : "gray",
+                          color: star <= (ratings[b.bookId._id] || 0) ? "gold" : "gray",
                           fontSize: "1.2rem",
                           marginRight: "3px"
                         }}
                         onClick={() =>
                           !isReturned &&
-                          setRatings(prev => ({ ...prev, [b.book._id]: star }))
+                          setRatings(prev => ({ ...prev, [b.bookId._id]: star }))
                         }
                       >
                         ★
@@ -113,13 +108,13 @@ const MyBorrowedBooks = () => {
                   <Input
                     type="textarea"
                     placeholder="Leave feedback"
-                    value={feedbacks[b.book._id] || ""}
+                    value={feedbacks[b.bookId._id] || ""}
                     disabled={isReturned}
                     onChange={e =>
                       !isReturned &&
                       setFeedbacks(prev => ({
                         ...prev,
-                        [b.book._id]: e.target.value,
+                        [b.bookId._id]: e.target.value,
                       }))
                     }
                     className="mb-2"
@@ -129,7 +124,7 @@ const MyBorrowedBooks = () => {
                   {!isReturned && (
                     <Button
                       color="success"
-                      onClick={() => handleReturn(b._id, b.book._id)}
+                      onClick={() => handleReturn(b._id, b.bookId._id)}
                     >
                       Return Book
                     </Button>
