@@ -205,7 +205,7 @@ app.post("/books/rate", async (req, res) => {
 // 🔹 Get Borrowed Books
 // --------------------
 
-// ✅ جلب كل الكتب المقترضة (Admin) — لازم يكون قبل
+
 app.get("/borrowedbooks/all", async (req, res) => {
   try {
     const borrowed = await BorrowedBook
@@ -217,7 +217,7 @@ app.get("/borrowedbooks/all", async (req, res) => {
   }
 });
 
-// ✅ جلب الكتب الخاصة بالطالب
+
 app.get("/borrowedbooks/:username", async (req, res) => {
   try {
     const borrowed = await BorrowedBook.find({
